@@ -457,8 +457,8 @@ P O I-ITE
 和 O O
 酮 O O
 症 O O
-较 O O
-少 O O
+较 O B-FRE
+少 O I-FRE
 出 O O
 现 O O
 
@@ -966,8 +966,8 @@ P O I-ITE
 颗 O I-SUB
 粒 O I-SUB
 ， O O
-有 O O
-时 O O
+有 O B-FRE
+时 O I-FRE
 呈 O O
 空 O O
 泡 O O
@@ -3340,8 +3340,8 @@ R O I-SUB
 死 I-SUB O
 亡 I-SUB O
 
-有 B-FRE O
-时 I-FRE O
+有 B-FRE B-FRE
+时 I-FRE I-FRE
 患 O O
 者 O O
 表 O O
@@ -4697,8 +4697,8 @@ H O I-ITE
 清 O B-SUB
 醒 O I-SUB
 
-较 B-FRE O
-少 I-FRE O
+较 B-FRE B-FRE
+少 I-FRE I-FRE
 有 B-SUB O
 害 I-SUB B-SUB
 怕 I-SUB I-SUB
@@ -4741,18 +4741,6 @@ M O O
 的 O O
 动 B-SUB B-SUB
 作 I-SUB I-SUB
-
-较 B-FRE O
-少 I-FRE O
-有 O O
-害 B-SUB B-SUB
-怕 I-SUB I-SUB
-和 I-SUB I-SUB
-恐 I-SUB I-SUB
-惧 I-SUB I-SUB
-的 O O
-表 O O
-现 O O
 
 但 B-SUB O
 并 I-SUB O
@@ -9227,8 +9215,8 @@ P I-ITE O
 常 I-SUB I-SUB
 ， I-SUB O
 也 I-SUB O
-有 I-SUB O
-时 I-SUB O
+有 I-SUB B-FRE
+时 I-SUB I-FRE
 为 I-SUB O
 瘢 I-SUB B-SUB
 痕 I-SUB I-SUB
@@ -9501,8 +9489,8 @@ P I-ITE O
 常 I-DEC I-SUB
 , I-SUB O
 也 I-SUB O
-有 I-SUB O
-时 I-SUB O
+有 I-SUB B-FRE
+时 I-SUB I-FRE
 为 I-SUB O
 瘢 B-DEC B-SUB
 痕 I-DEC I-SUB
@@ -11027,8 +11015,8 @@ m O O
 变 I-SUB I-SUB
 宽 I-SUB I-SUB
 , O O
-有 B-FRE O
-时 I-FRE O
+有 B-FRE B-FRE
+时 I-FRE I-FRE
 小 B-BOD O
 脑 I-BOD O
 沟 I-BOD O
@@ -11211,8 +11199,8 @@ m O O
 变 I-SUB I-SUB
 宽 I-SUB I-SUB
 ， O O
-有 B-FRE O
-时 I-FRE O
+有 B-FRE B-FRE
+时 I-FRE I-FRE
 小 B-BOD O
 脑 I-BOD O
 沟 I-BOD O
@@ -13166,19 +13154,6 @@ A O I-BOD
 牵 I-SUB B-SUB
 引 I-SUB I-SUB
 
-头 B-BOD B-BOD
-皮 I-BOD I-BOD
-与 O O
-颈 B-BOD B-BOD
-部 I-BOD I-BOD
-肌 I-BOD I-BOD
-肉 I-BOD I-BOD
-持 B-FRE B-DEC
-久 I-FRE I-DEC
-的 O O
-收 B-SUB B-SUB
-缩 I-SUB I-SUB
-
 颅 B-BOD B-BOD
 内 I-BOD I-BOD
 与 I-BOD O
@@ -13299,8 +13274,8 @@ A O I-BOD
 搏 O B-DEC
 动 O I-DEC
 性 O I-DEC
-较 O O
-少 O O
+较 O B-FRE
+少 O I-FRE
 见 O O
 
 良 B-DEC B-DEC
@@ -13738,6 +13713,17 @@ A O I-BOD
 
 畏 O B-SUB
 声 O I-SUB
+
+持 B-DEC B-FRE
+久 I-DEC I-FRE
+性 I-DEC I-DEC
+颈 B-BOD B-BOD
+肩 I-BOD I-BOD
+部 I-BOD I-BOD
+肌 I-BOD I-BOD
+肉 I-BOD I-BOD
+痉 B-SUB B-SUB
+挛 I-SUB I-SUB
 
 细 O B-BOD
 胞 O I-BOD
@@ -14275,7 +14261,7 @@ F O O
 高 O B-SUB
 压 O I-SUB
 
-偶 B-FRE O
+偶 B-FRE B-FRE
 致 O O
 视 B-BOD B-BOD
 网 I-BOD I-BOD
@@ -14984,10 +14970,10 @@ k I-DEC O
 
 抽 B-SUB O
 动 I-SUB O
-频 B-FRE O
-率 I-FRE O
-增 I-FRE B-SUB
-加 I-FRE I-SUB
+频 B-FRE B-FRE
+率 I-FRE I-FRE
+增 I-FRE I-FRE
+加 I-FRE I-FRE
 
 摇 B-SUB B-SUB
 头 B-BOD I-SUB
@@ -15046,8 +15032,8 @@ k I-DEC O
 续 O I-DEC
 性 O I-DEC
 的 O O
-天 B-FRE O
-天 I-FRE O
+天 B-FRE B-FRE
+天 I-FRE I-FRE
 出 B-SUB O
 现 I-SUB O
 
@@ -16270,8 +16256,8 @@ A I-BOD O
 ， O O
 几 B-FRE O
 乎 I-FRE O
-天 I-FRE O
-天 I-FRE O
+天 I-FRE B-FRE
+天 I-FRE I-FRE
 如 O O
 此 O O
 ， O O
@@ -16309,10 +16295,10 @@ A I-BOD O
 性 O O
 ） O O
 或 O O
-间 B-FRE O
-歇 I-FRE O
-发 I-FRE O
-作 I-FRE O
+间 B-FRE B-FRE
+歇 I-FRE I-FRE
+发 I-FRE I-FRE
+作 I-FRE I-FRE
 
 复 B-DEC B-DEC
 发 I-DEC I-DEC

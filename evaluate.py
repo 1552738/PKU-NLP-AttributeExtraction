@@ -67,11 +67,28 @@ def extract_labels(text, ners):
     return labels
 
 
+def deal_with_frequency(x_test, y_pred):
+    """
+    对频率特征补充使用规则匹配方法
+    """
+    rules = ['有时', '偶', '较少', '持久', '天天', '间歇发作', '频率增加']
+    for i in range(len(x_test)):
+        sym_str = ''.join(x_test[i])
+        for rule in rules:
+            pos = sym_str.find(rule)
+            if pos != -1 and y_pred[i][pos] != 'B-FRE':
+                y_pred[i][pos] = 'B-FRE'
+                for p in range(1, len(rule)):
+                    y_pred[i][pos+p] = 'I-FRE'
+    return y_pred
+
+
 def predict_ner(model, x_test):
     """
     症状内部特征预测
     """
     y_pred = model.predict(x_test)
+    y_pred = deal_with_frequency(x_test, y_pred)
 
     # 将预测序列进行整理
     predict_feature = [[], [], [], [], []]
@@ -118,7 +135,6 @@ def evaluate_acc(predict_feature):
 def export_result_and_error_sentence(x_test, y_test, y_pred, result_save_path, error_save_path):
     """
     输出预测结果文件以及错误案例
-    :return:
     """
     f = open(result_save_path, 'w')
     f_err = open(error_save_path, 'w')

@@ -132,3 +132,4 @@ bin/
 bert_model/
 .DS_Store/
 .idea/
+.DS_Store
