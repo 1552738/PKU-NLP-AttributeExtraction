@@ -4,6 +4,10 @@
 
 import os
 import json
+import re
+import codecs
+import numpy as np
+import torch
 
 feature = ['disease', 'body', 'subject', 'decorate', 'frequency', 'item']
 label = ['DIS', 'BOD', 'SUB', 'DEC', 'FRE', 'ITE']
@@ -61,6 +65,90 @@ def bio_labeling(original_file, labeled_file):
                 f.write(self_val[i] + ' ' + sequence[i] + '\n')
             f.write('\n')
             f.close()
+
+
+# from here by: qiwangyu
+# process the text to match the word vectors
+def process_text(text):
+    text = text.replace(' ', '')
+    text = re.sub('\[[0-9]*', '', text)
+    text = re.sub('[0-9]*\]', '', text)
+    text = text.replace('dis', '')
+    text = text.replace('sym', '')
+    text = text.replace('bod', '')
+    text = text.replace('ite', '')
+    text = text.replace('參', '参')
+    text = text.replace('橫', '横')
+    text = text.replace('？', '?')
+    text = text.replace('；', ';')
+    text = text.replace('：', ':')
+    text = text.replace('，', ',')
+    text = text.replace('—', '')
+    text = text.replace('）', ')')
+    text = text.replace('（', '(')
+
+    return text
+
+
+#get word vector
+def get_word_vector():
+    files = ['train.txt', 'dev.txt', 'test.txt']
+    words = []
+    for file in files:
+        with open('original_dataset/' + file, 'r', encoding='utf8') as f:
+            data = json.load(f)
+            for line in data:
+                text = line['text']
+                text = process_text(text)
+                for w in text:
+                    words.append(w)
+    pre_trained = {}
+    for i, line in enumerate(codecs.open('data/wiki_100.utf8', 'r', 'utf-8')):
+        line = line.rstrip().split()
+        pre_trained[line[0]] = np.array([float(x) for x in line[1:]]).astype(np.float32)
+
+    words = list(set(words))
+    wv, w2i = [np.array([0 for i in range(100)])], {}
+    for i in range(len(words)):
+        w2i[words[i]] = i + 1
+        wv.append(pre_trained[words[i]])
+    wv = torch.from_numpy(np.array(wv))
+
+    return wv, w2i
+
+
+wv, w2i = get_word_vector()
+MAX_LEN = 500
+
+
+# generate position embedding giving locations of the disease and symptom
+def generate_pos_emb(s1, e1, s2, e2):
+    global MAX_LEN
+    pos_emb = []
+    for i in range(MAX_LEN):
+        a, b = 0, 0
+        if i < s1:
+            a = i - s1
+        elif i > e1:
+            a = i - e1
+        if i < s2:
+            b = i - s2
+        elif i > e2:
+            b = i - e2
+        pos_emb.append([a, b])
+    return pos_emb
+
+
+# convert word to vectors
+def generate_train_data(text):
+    global MAX_LEN
+    t = [w2i[w] for w in text]
+    if len(t) > MAX_LEN:
+        t = t[:MAX_LEN]
+    else:
+        t.extend([0 for i in range(MAX_LEN - len(text))])
+    return t
+
 
 
 if __name__ == "__main__":

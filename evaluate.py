@@ -3,6 +3,10 @@
 # @Author  : lihang
 
 import json
+import re
+import torch
+from dataset import *
+from model import CRCNN
 import numpy as np
 from dataset import test_original
 
@@ -153,3 +157,60 @@ def export_result_and_error_sentence(x_test, y_test, y_pred, result_save_path, e
 
     f.close()
     f_err.close()
+
+
+# by:qiwangyu
+def accuracy(file, model):
+    total, right = 0, 0
+    with open('original_dataset/' + file, 'r', encoding='utf8') as f:
+        data = json.load(f)
+        for line in data:
+            dis = re.findall('\[[^\[\]]*\]dis', line['text'])
+            text = process_text(line['text'])
+            pos_dis = {}
+            for d in dis:
+                ss = re.findall('\[[0-9]+', d)
+                ee = re.findall('[0-9]+\]', d)
+                if not (ss and ee):
+                    continue
+                s = int(ss[0][1:])
+                e = int(ee[0][:-1])
+                if s < 0 or s > e or e > MAX_LEN:
+                    continue
+                pos_dis[text[s : e+1]] = [s, e]
+            dis_set = set([d for d in pos_dis])
+            for i, sym in line['symptom'].items():
+                if sym['has_problem'] or len(sym['self']['pos']) < 2:
+                    continue
+                s, e = sym['self']['pos']
+                if s < 0 or s > e or e > MAX_LEN:
+                    continue
+                sym_dis = []
+                if len(sym['disease']['pos']) > 2:
+                    sym_dis = sym['disease']['val'].split()
+                else:
+                    sym_dis.append(sym['disease']['val'])
+                if len(sym_dis) == 0 or sym_dis[0] not in dis_set:
+                    continue
+                total += 1
+                dis_pred = {}
+                for d, p in pos_dis.items():
+                    x0 = torch.from_numpy(np.array([generate_train_data(text)])).long()
+                    x1 = torch.from_numpy(np.array([generate_pos_emb(s, e, p[0], p[1])])).long()
+                    x0, x1 = x0.to(device), x1.to(device)
+                    y_ = model([x0, x1])
+                    dis_pred[d] = y_[0][1].item()
+                if len(dis_pred) == 0:
+                    continue
+                dis_list = list(dis_pred.items())
+                dis_list.sort(key=lambda x:x[1], reverse=True)
+                if dis_list[0][0] in sym_dis:
+                    right += 1
+    print('acc:%f' % (right/total))
+
+
+if __name__ == '__main__':
+
+    model = torch.load('disease_model/crcnn_model.ckpt')
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    accuracy('test.txt', model)
