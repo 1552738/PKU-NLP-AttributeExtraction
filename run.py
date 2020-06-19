@@ -21,6 +21,8 @@ model_save_path = os.path.join('ner_model', 'ner_bert_bilstm_crf.h5')
 result_save_path = os.path.join('predict', 'ner_predict.txt')
 error_save_path = os.path.join('predict', 'error_sentence.txt')
 
+kashgari.config.use_cudnn_cell = True
+
 
 def get_sequent_tagging_data(file_path):
     data_x, data_y = [], []
