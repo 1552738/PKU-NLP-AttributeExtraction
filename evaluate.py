@@ -166,7 +166,7 @@ def accuracy(file, model):
         data = json.load(f)
         for line in data:
             dis = re.findall('\[[^\[\]]*\]dis', line['text'])
-            text = process_text(line['text'])
+            text = process_text(line['text'])  # max_len = max(max_len, len(text))
             pos_dis = {}
             for d in dis:
                 ss = re.findall('\[[0-9]+', d)
@@ -177,7 +177,7 @@ def accuracy(file, model):
                 e = int(ee[0][:-1])
                 if s < 0 or s > e or e > MAX_LEN:
                     continue
-                pos_dis[text[s : e+1]] = [s, e]
+                pos_dis[text[s: e + 1]] = [s, e]
             dis_set = set([d for d in pos_dis])
             for i, sym in line['symptom'].items():
                 if sym['has_problem'] or len(sym['self']['pos']) < 2:
@@ -203,14 +203,15 @@ def accuracy(file, model):
                 if len(dis_pred) == 0:
                     continue
                 dis_list = list(dis_pred.items())
-                dis_list.sort(key=lambda x:x[1], reverse=True)
+                dis_list.sort(key=lambda x: x[1], reverse=True)
                 if dis_list[0][0] in sym_dis:
                     right += 1
-    print('acc:%f' % (right/total))
+    return right / total
 
 
 if __name__ == '__main__':
 
-    model = torch.load('disease_model/crcnn_model.ckpt')
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-    accuracy('test.txt', model)
+    model = torch.load('disease_model/textcnn_model.ckpt')
+    model.eval()
+    print(accuracy('test.txt', model))
