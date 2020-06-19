@@ -53,7 +53,8 @@ class CRCNN(nn.Module):
         self.embed = nn.Embedding.from_pretrained(wv)
         self.pos_embed = nn.Embedding(2 * sent_len + 2, pos_dim)
 
-        self.convs = nn.ModuleList([nn.Conv2d(1, num_kernel, (K, emb_dim + 2 * pos_dim), padding=((K - 1) // 2, 0)) for K in kerner_sizes])
+        self.convs = nn.ModuleList([nn.Conv2d(1, num_kernel, (K, emb_dim + 2 * pos_dim),
+                                    padding=((K - 1) // 2, 0)) for K in kerner_sizes])
         self.dropout1 = nn.Dropout(drop_prob)
         self.dropout2 = nn.Dropout(drop_prob)
         self.fc = nn.Linear(len(kerner_sizes) * num_kernel, 2)
